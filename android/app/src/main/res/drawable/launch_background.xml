@@ -17,7 +17,7 @@
 
     <item
         android:width="50dp"
-        android:height="50dp"
+        android:height="36dp"
         android:drawable="@drawable/launch_icon"
         android:gravity="center">
 
