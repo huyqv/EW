@@ -30,4 +30,7 @@ class ColorRes {
   static const Color statusBarColor = Colors.white;
 
   static const Color defaultBackgroundColor = Colors.white;
+
+  static const Color primary = Color(0xFF1E88E5);
+
 }

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:sample/const/color_res.dart';
 import 'package:sample/widgets/ui.dart';
 
-import 'pages/home/home.dart';
+import 'pages/home.dart';
+import 'pages/menu.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
         // This is the theme of your application.
         primarySwatch: ColorRes.white,
       ),
-      home: const HomePage(title: ''),
+      home: const MenuPage(),
     );
   }
 }

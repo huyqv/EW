@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:sample/const/color_res.dart';
+import 'package:sample/utils/native.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -21,10 +21,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   int _counter = 0;
 
   void _incrementCounter() {
     setState(() {
+      Native.showToast("Hello World !");
       _counter++;
     });
   }
@@ -54,4 +56,5 @@ class _HomePageState extends State<HomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
 }
