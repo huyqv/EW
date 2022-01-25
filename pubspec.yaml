@@ -12,9 +12,12 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   auto_size_text: ^3.0.0
-  provider: ^5.0.0
+  flutter_riverpod: ^1.0.3
+  built_value: ^8.1.4
+  provider: ^6.0.2
   http: ^0.13.4
   shared_preferences: ^2.0.12
+  connectivity_plus: ^2.2.0
   animator: ^3.1.0
   smooth_page_indicator: ^1.0.0+2
 
@@ -22,7 +25,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
-
 
 flutter:
   uses-material-design: true

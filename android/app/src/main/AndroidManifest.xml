@@ -14,7 +14,7 @@
         android:name="${applicationName}"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
-        android:label="sample"
+        android:label="Sample Flutter"
         android:largeHeap="true"
         android:launchMode="singleTop"
         android:networkSecurityConfig="@xml/network_security_config"

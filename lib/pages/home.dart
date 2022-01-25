@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sample/const/color_res.dart';
+import 'package:sample/utils/color_res.dart';
 import 'package:sample/utils/native.dart';
 
 class HomePage extends StatefulWidget {

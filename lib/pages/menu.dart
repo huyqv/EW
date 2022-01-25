@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sample/base/base_state.dart';
-import 'package:sample/const/color_res.dart';
+import 'package:sample/utils/base_state.dart';
 import 'package:sample/pages/wifi.dart';
+import 'package:sample/utils/native.dart';
+import 'package:sample/widgets/ui.dart';
 
 class MenuItem {
   final int id;
@@ -19,40 +20,47 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends BaseState<MenuPage> {
 
-  List<MenuItem> menuItems = [
-    MenuItem(1, 'Wifi')
-  ];
+  List<MenuItem> menuItems = [MenuItem(1, 'Toast'), MenuItem(2, 'Wifi')];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: ColorRes.defaultBackgroundColor,
-        body: ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: menuItems.length,
-            itemBuilder: (BuildContext context, int index) {
-              return listItem(menuItems[index]);
-            }));
+    return defaultPageLayout(
+      child: ListView.builder(
+          itemCount: menuItems.length,
+          itemBuilder: (BuildContext context, int index) {
+            return listItem(index);
+          }),
+    );
   }
 
-  Widget listItem(MenuItem item) {
+  Widget listItem(int index) {
+    MenuItem item = menuItems[index];
     return GestureDetector(
-      child: SizedBox(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
         height: 50,
+        color: Colors.blue[(index + 1) * 100],
         child: Align(
           alignment: Alignment.centerLeft,
           child: Text(item.text),
         ),
       ),
-      onTap: () {
-        switch (item.id) {
-          case 1:
-            push(const WifiPage());
-            break;
-          default:
-            break;
-        }
-      },
+      onTap: onMenuItemTap(item),
     );
+  }
+
+  GestureTapCallback onMenuItemTap(MenuItem item) {
+    return () {
+      switch (item.id) {
+        case 1:
+          Native.showToast("Hello !");
+          break;
+        case 2:
+          push(WifiPage());
+          break;
+        default:
+          break;
+      }
+    };
   }
 }
