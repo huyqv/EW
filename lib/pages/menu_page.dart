@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sample/utils/base_state.dart';
-import 'package:sample/pages/wifi.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sample/pages/base_page.dart';
+import 'package:sample/pages/home_page.dart';
+import 'package:sample/pages/wifi_page.dart';
 import 'package:sample/utils/native.dart';
 import 'package:sample/widgets/ui.dart';
 
@@ -11,29 +13,28 @@ class MenuItem {
   MenuItem(this.id, this.text);
 }
 
-class MenuPage extends StatefulWidget {
-  const MenuPage({Key? key}) : super(key: key);
+class MenuPage extends BasePage {
+  MenuPage({Key? key}) : super(key: key);
+
+  late List<MenuItem> menuItems;
 
   @override
-  State<MenuPage> createState() => _MenuPageState();
-}
-
-class _MenuPageState extends BaseState<MenuPage> {
-
-  List<MenuItem> menuItems = [MenuItem(1, 'Toast'), MenuItem(2, 'Wifi')];
-
-  @override
-  Widget build(BuildContext context) {
-    return defaultPageLayout(
+  Widget build(BuildContext context, WidgetRef ref) {
+    menuItems = [
+      MenuItem(1, 'Toast'),
+      MenuItem(2, 'Home'),
+      MenuItem(3, 'Wifi')
+    ];
+    return defaultScaffold(
       child: ListView.builder(
           itemCount: menuItems.length,
           itemBuilder: (BuildContext context, int index) {
-            return listItem(index);
+            return listItem(context, index);
           }),
     );
   }
 
-  Widget listItem(int index) {
+  Widget listItem(BuildContext context, int index) {
     MenuItem item = menuItems[index];
     return GestureDetector(
       child: Container(
@@ -45,18 +46,21 @@ class _MenuPageState extends BaseState<MenuPage> {
           child: Text(item.text),
         ),
       ),
-      onTap: onMenuItemTap(item),
+      onTap: onMenuItemTap(context, item),
     );
   }
 
-  GestureTapCallback onMenuItemTap(MenuItem item) {
+  GestureTapCallback onMenuItemTap(BuildContext context, MenuItem item) {
     return () {
       switch (item.id) {
         case 1:
           Native.showToast("Hello !");
           break;
         case 2:
-          push(WifiPage());
+          push(context, HomePage());
+          break;
+        case 3:
+          push(context, WifiPage());
           break;
         default:
           break;

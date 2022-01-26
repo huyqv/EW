@@ -11,7 +11,7 @@ void applyAppTheme(){
   ));
 }
 
-Widget defaultPageLayout({required Widget child}) {
+Widget defaultScaffold({required Widget child}) {
   return Scaffold(
       backgroundColor: ColorRes.defaultBackgroundColor,
       body: SafeArea(
@@ -20,5 +20,3 @@ Widget defaultPageLayout({required Widget child}) {
         child: child,
       ));
 }
-
-

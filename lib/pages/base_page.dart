@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sample/widgets/progress.dart';
 
-abstract class BaseState<SW extends StatefulWidget> extends State<SW> {
+abstract class BasePage extends ConsumerWidget {
+  BasePage({Key? key}) : super(key: key);
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
+  /// Progress widget
   ProgressDialog? progressDialog;
 
-  void showProgress() {
+  void showProgress(BuildContext context) {
     if (progressDialog == null) {
       progressDialog = ProgressDialog();
       Navigator.of(context).push(progressDialog!).then((value) {
@@ -26,25 +19,25 @@ abstract class BaseState<SW extends StatefulWidget> extends State<SW> {
 
   void hideProgress() {
     if (progressDialog != null && progressDialog?.isActive == true) {
-      pop();
       progressDialog = null;
     }
   }
 
   void alert(String message) {}
 
-  void pop() {
+  /// Navigation
+  void pop(BuildContext context) {
     Navigator.of(context).pop();
   }
 
-  Future<dynamic> push(Widget widget) {
+  Future<dynamic> push(BuildContext context, Widget widget) {
     return Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => widget),
     );
   }
 
-  Future<dynamic> pushAndRemove(Widget widget) {
+  Future<dynamic> pushAndRemove(BuildContext context, Widget widget) {
     return Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => widget),
