@@ -30,5 +30,8 @@ class MyMethodChannel(engine: FlutterEngine, private val int: Interface) : Metho
         fun wifiList(): List<Map<String, String>>
 
         fun isWifiEnabled(): Boolean
+
+        fun wifiEnabled(isEnable: Boolean)
+
     }
 }

@@ -1,8 +1,13 @@
 package com.example.sample
 
+import android.content.Context
 import android.widget.Toast
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
+import android.net.wifi.WifiManager
+
+
+
 
 
 class MainActivity : FlutterActivity(), MyMethodChannel.Interface {
@@ -26,6 +31,11 @@ class MainActivity : FlutterActivity(), MyMethodChannel.Interface {
 
     override fun isWifiEnabled(): Boolean {
         return wifiManager.isWifiEnabled
+    }
+
+    override fun wifiEnabled(isEnable: Boolean) {
+        val wifi = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        wifi.isWifiEnabled = isEnable
     }
 
 

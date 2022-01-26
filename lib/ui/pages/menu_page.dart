@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sample/pages/base_page.dart';
-import 'package:sample/pages/home_page.dart';
-import 'package:sample/pages/wifi_page.dart';
+import 'package:sample/ui/pages/base_page.dart';
+import 'package:sample/ui/pages/home_page.dart';
+import 'package:sample/ui/pages/wifi_page.dart';
 import 'package:sample/utils/native.dart';
 
 class MenuItem {
@@ -12,6 +12,7 @@ class MenuItem {
   MenuItem(this.id, this.text);
 }
 
+//ignore: must_be_immutable
 class MenuPage extends BasePage {
   MenuPage({Key? key}) : super(key: key);
 

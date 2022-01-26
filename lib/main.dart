@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sample/utils/color_res.dart';
 
 import 'data/pref.dart';
-import 'pages/menu_page.dart';
+import 'ui/pages/menu_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
