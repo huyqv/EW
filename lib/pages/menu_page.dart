@@ -4,7 +4,6 @@ import 'package:sample/pages/base_page.dart';
 import 'package:sample/pages/home_page.dart';
 import 'package:sample/pages/wifi_page.dart';
 import 'package:sample/utils/native.dart';
-import 'package:sample/widgets/ui.dart';
 
 class MenuItem {
   final int id;

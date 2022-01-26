@@ -1,8 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:sample/utils/color_res.dart';
 
-class ProgressDialog extends ModalRoute<void> {
+mixin ProgressWidget {
+  /// Progress widget
+  ProgressDialog? progressDialog;
 
+  void showProgress(BuildContext context) {
+    if (progressDialog == null) {
+      progressDialog = ProgressDialog();
+      Navigator.of(context).push(progressDialog!).then((value) {
+        progressDialog = null;
+      });
+    }
+  }
+
+  void hideProgress() {
+    if (progressDialog != null && progressDialog?.isActive == true) {
+      progressDialog = null;
+    }
+  }
+}
+
+class ProgressDialog extends ModalRoute<void> {
   @override
   Duration get transitionDuration => const Duration(milliseconds: 1000);
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sample/utils/color_res.dart';
-import 'package:sample/widgets/ui.dart';
 
 import 'data/pref.dart';
 import 'pages/menu_page.dart';
@@ -33,3 +33,12 @@ class App extends StatelessWidget {
     );
   }
 }
+
+void applyAppTheme(){
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: ColorRes.statusBarColor,
+    statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+    statusBarBrightness: Brightness.dark, // For iOS (dark icons)
+  ));
+}
+

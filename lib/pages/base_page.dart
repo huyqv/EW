@@ -1,31 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sample/utils/color_res.dart';
 import 'package:sample/widgets/progress.dart';
 
-abstract class BasePage extends ConsumerWidget {
+//ignore: must_be_immutable
+abstract class BasePage extends ConsumerWidget with ProgressWidget {
+
   BasePage({Key? key}) : super(key: key);
-
-  /// Progress widget
-  ProgressDialog? progressDialog;
-
-  void showProgress(BuildContext context) {
-    if (progressDialog == null) {
-      progressDialog = ProgressDialog();
-      Navigator.of(context).push(progressDialog!).then((value) {
-        progressDialog = null;
-      });
-    }
-  }
-
-  void hideProgress() {
-    if (progressDialog != null && progressDialog?.isActive == true) {
-      progressDialog = null;
-    }
-  }
 
   void alert(String message) {}
 
-  /// Navigation
+  Widget defaultScaffold({required Widget child}) {
+    return Scaffold(
+        backgroundColor: ColorRes.defaultBackgroundColor,
+        body: SafeArea(
+          top: true,
+          bottom: true,
+          child: child,
+        ));
+  }
+
   void pop(BuildContext context) {
     Navigator.of(context).pop();
   }
@@ -41,7 +35,9 @@ abstract class BasePage extends ConsumerWidget {
     return Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => widget),
-      (Route<dynamic> route) => false,
+          (Route<dynamic> route) => false,
     );
   }
+
+
 }
