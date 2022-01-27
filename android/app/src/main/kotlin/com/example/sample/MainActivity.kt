@@ -60,6 +60,7 @@ class MainActivity : FlutterActivity(), MyMethodChannel.Interface {
     }
 
     private var networkCallback: ConnectivityManager.NetworkCallback? = null
+
     private var unregisterNetworkObserver: LifecycleObserver? = null
 
     override fun wifiListen(result: MethodChannel.Result?) {
