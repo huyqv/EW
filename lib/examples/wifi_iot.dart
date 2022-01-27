@@ -1,7 +1,8 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wifi_iot/wifi_iot.dart';
-import 'dart:io' show Platform;
 
 const String STA_DEFAULT_SSID = "STA_SSID";
 const String STA_DEFAULT_PASSWORD = "STA_PASSWORD";
@@ -32,7 +33,7 @@ class _FlutterWifiIoTState extends State<FlutterWifiIoT> {
   bool _isWifiEnableOpenSettings = false;
   bool _isWifiDisableOpenSettings = false;
 
-  final TextStyle textStyle = TextStyle(color: Colors.white);
+  final TextStyle textStyle = const TextStyle(color: Colors.white);
 
   @override
   initState() {

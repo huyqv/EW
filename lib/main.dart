@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sample/utils/color_res.dart';
+import 'package:sample/ui/pages/wifi_page.dart';
+import 'package:sample/ui/res/color.dart';
 
 import 'data/pref.dart';
-import 'ui/pages/menu_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +29,7 @@ class App extends StatelessWidget {
         // This is the theme of your application.
         primarySwatch: ColorRes.white,
       ),
-      home: MenuPage(),
+      home: WifiPage(),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sample/utils/color_res.dart';
+import 'package:sample/ui/res/color.dart';
+import 'package:sample/ui/widgets/layout.dart';
 
 import 'base_page.dart';
 

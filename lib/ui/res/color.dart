@@ -22,15 +22,11 @@ MaterialColor createMaterialColor(int value) {
 }
 
 class ColorRes {
-
   ColorRes._();
 
   static MaterialColor white = createMaterialColor(0xFFFFFFFF);
-
   static const Color statusBarColor = Colors.white;
-
   static const Color defaultBackgroundColor = Colors.white;
-
-  static const Color primary = Color(0xFF1E88E5);
-
+  static const Color primary = Color(0xFF285EA9);
+  static const Color disable = Color(0xFFB8B8B8);
 }

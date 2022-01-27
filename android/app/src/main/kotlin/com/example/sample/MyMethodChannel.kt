@@ -8,13 +8,26 @@ class MyMethodChannel(engine: FlutterEngine, private val int: Interface) : Metho
     "com.example.sample/flutter"
 ) {
 
+    var result: Result? = null
+
     init {
         setMethodCallHandler { call, result ->
-            val argument = call.arguments() as Map<String, String>;
+            this.result = result
+            val argument = call.arguments() as Map<String, String>
             when (call.method) {
                 "showToast" -> {
                     val message = argument["message"]
                     int.showToast(message)
+                }
+                "wifiEnable" -> {
+                    val isEnable = argument["isEnable"]
+                    int.wifiEnable(isEnable)
+                }
+                "isWifiEnabled"->{
+                    int.isWifiEnabled(result)
+                }
+                "wifiListen" -> {
+                    int.wifiListen(result)
                 }
                 "wifiList" -> {
                     int.wifiList()
@@ -27,11 +40,12 @@ class MyMethodChannel(engine: FlutterEngine, private val int: Interface) : Metho
 
         fun showToast(s: String?)
 
-        fun wifiList(): List<Map<String, String>>
+        fun wifiList(): List<Map<String, Any>>
 
-        fun isWifiEnabled(): Boolean
+        fun isWifiEnabled(result : Result?)
 
-        fun wifiEnabled(isEnable: Boolean)
+        fun wifiEnable(isEnable: String?)
 
+        fun wifiListen(result : Result?)
     }
 }

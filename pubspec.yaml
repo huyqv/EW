@@ -22,6 +22,7 @@ dependencies:
   smooth_page_indicator: ^1.0.0+2
   wifi_iot: ^0.3.14
   device_info_plus: ^3.2.1
+  easy_localization: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -33,6 +34,7 @@ flutter:
   assets:
     - assets/images/logo.png
     - assets/images/logo_text.png
+    - assets/images/wifi_anim.gif
   fonts:
     - family: Inter
       fonts:

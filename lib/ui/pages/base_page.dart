@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sample/utils/color_res.dart';
 import 'package:sample/ui/widgets/progress.dart';
 
 //ignore: must_be_immutable
@@ -9,19 +8,6 @@ abstract class BasePage extends ConsumerWidget with ProgressWidget {
   BasePage({Key? key}) : super(key: key);
 
   void alert(String message) {}
-
-  Widget defaultScaffold({
-    Color backgroundColor = ColorRes.defaultBackgroundColor,
-    required Widget child
-  }) {
-    return Scaffold(
-        backgroundColor: backgroundColor,
-        body: SafeArea(
-          top: true,
-          bottom: true,
-          child: child,
-        ));
-  }
 
   void pop(BuildContext context) {
     Navigator.of(context).pop();

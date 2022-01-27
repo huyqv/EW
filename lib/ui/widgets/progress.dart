@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sample/utils/color_res.dart';
+import 'package:sample/ui/res/color.dart';
 
 mixin ProgressWidget {
   /// Progress widget
