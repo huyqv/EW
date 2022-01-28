@@ -13,6 +13,8 @@ final wifiProvider = ChangeNotifierProvider<WifiVM>(
   (ref) => WifiVM(),
 );
 
+/// https://stackoverflow.com/questions/36303123/how-to-programmatically-connect-to-a-wifi-network-given-the-ssid-and-password
+/// https://www.youtube.com/watch?v=ssAKYGlmR4s
 //ignore: must_be_immutable
 class WifiPage extends BasePage {
   WifiPage({Key? key}) : super(key: key);

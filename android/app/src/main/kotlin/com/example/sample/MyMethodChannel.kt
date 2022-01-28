@@ -19,18 +19,18 @@ class MyMethodChannel(engine: FlutterEngine, private val int: Interface) : Metho
                     val message = argument["message"]
                     int.showToast(message)
                 }
+                "isWifiEnabled" -> {
+                    int.isWifiEnabled(result)
+                }
                 "wifiEnable" -> {
                     val isEnable = argument["isEnable"]
-                    int.wifiEnable(isEnable)
-                }
-                "isWifiEnabled"->{
-                    int.isWifiEnabled(result)
+                    int.wifiEnable(result, isEnable)
                 }
                 "wifiListen" -> {
                     int.wifiListen(result)
                 }
                 "wifiList" -> {
-                    int.wifiList()
+                    int.wifiList(result)
                 }
             }
         }
@@ -40,12 +40,15 @@ class MyMethodChannel(engine: FlutterEngine, private val int: Interface) : Metho
 
         fun showToast(s: String?)
 
-        fun wifiList(): List<Map<String, Any>>
+        fun isWifiEnabled(result: Result?)
 
-        fun isWifiEnabled(result : Result?)
+        fun wifiEnable(result: Result?, isEnable: String?)
 
-        fun wifiEnable(isEnable: String?)
+        fun wifiListen(result: Result?)
 
-        fun wifiListen(result : Result?)
+        fun wifiConnect(result: Result?)
+
+        fun wifiList(result: Result?)
+
     }
 }
