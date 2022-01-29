@@ -23,7 +23,7 @@ class MyMethodChannel(engine: FlutterEngine, private val int: Interface) : Metho
                     int.isWifiEnabled(result)
                 }
                 "wifiEnable" -> {
-                    val isEnable = argument["isEnable"]
+                    val isEnable = argument["isEnable"].toString().toBoolean()
                     int.wifiEnable(result, isEnable)
                 }
                 "wifiListen" -> {

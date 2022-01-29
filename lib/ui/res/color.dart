@@ -29,4 +29,5 @@ class ColorRes {
   static const Color defaultBackgroundColor = Colors.white;
   static const Color primary = Color(0xFF285EA9);
   static const Color disable = Color(0xFFB8B8B8);
+  static const Color textDefault = Color(0xFF323232);
 }

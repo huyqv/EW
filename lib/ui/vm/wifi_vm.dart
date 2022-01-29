@@ -1,8 +1,8 @@
 import 'dart:developer' as dev;
 
 import 'package:flutter/cupertino.dart';
+import 'package:sample/model/wifi.dart';
 import 'package:sample/utils/native.dart';
-import 'package:wifi_iot/wifi_iot.dart';
 
 class WifiVM with ChangeNotifier {
   bool connected = false;
@@ -11,29 +11,9 @@ class WifiVM with ChangeNotifier {
   String ssid = '...';
   String bssid = '...';
   String ip = '...';
-  int signalStrength = 0;
-  List<WifiNetwork?>? wifiList;
+  List<Wifi>? wifiList;
 
-  init() async {
-    Native.wifiListen().then((value) {
-      if (isProcessing) {
-        return;
-      }
-      if (isEnable == value) {
-        return;
-      }
-      isEnable = value;
-      notifyListeners();
-      loadWifiList();
-      notifyListeners();
-    });
-
-    WiFiForIoTPlugin.isConnected().then((val) {
-      connected = val;
-      onConnectivityChanged();
-      notifyListeners();
-    });
-  }
+  init() async {}
 
   switchEnable() async {
     if (isProcessing) {
@@ -49,38 +29,24 @@ class WifiVM with ChangeNotifier {
   }
 
   onConnectivityChanged() async {
-    if (connected) {
-      ssid = await WiFiForIoTPlugin.getSSID() ?? '...';
-      bssid = await WiFiForIoTPlugin.getBSSID() ?? '...';
-      ip = await WiFiForIoTPlugin.getIP() ?? '...';
-      signalStrength = await WiFiForIoTPlugin.getCurrentSignalStrength() ?? 0;
-    }
+    if (connected) {}
   }
 
-  loadWifiList() async {
+  scan() async {
     if (!isEnable) {
       return;
     }
     try {
-      wifiList = await WiFiForIoTPlugin.loadWifiList();
+      wifiList = await Native.wifiScan();
       wifiList?.forEach((element) {});
       return;
     } catch (e) {
       dev.log(e.toString());
     }
-    wifiList = null;
   }
 
-  register() {
-    try {
-      WiFiForIoTPlugin.registerWifiNetwork(
-        'Wee_Office1_2GHZ',
-        password: 'weedigital@22',
-        security: NetworkSecurity.WPA,
-        isHidden: false,
-      );
-    } catch (e) {
-      dev.log(e.toString());
-    }
+  connect() {
+    Native.connect();
   }
+
 }

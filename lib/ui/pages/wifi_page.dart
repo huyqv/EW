@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sample/ui/res/color.dart';
 import 'package:sample/ui/res/dimen.dart';
 import 'package:sample/ui/vm/wifi_vm.dart';
@@ -25,20 +26,34 @@ class WifiPage extends BasePage {
   Widget build(BuildContext context, WidgetRef ref) {
     wifiVM = ref.watch(wifiProvider);
     wifiVM.init();
+
     return defaultScaffold(
       child: Column(
         children: [
           wifiStateWidgets(),
           connectionWidget(),
           buttonPrimary(
-              text: 'Register',
+              text: 'Scan',
               onPressed: () {
-                wifiVM.register();
+                requestWifiPermission(context);
+              }),
+          buttonPrimary(
+              text: 'Connect',
+              onPressed: () {
+                wifiVM.connect();
               }),
           wifiListWidget()
         ],
       ),
     );
+  }
+
+  void requestWifiPermission(BuildContext context) async {
+    requestPermission(Permission.location, onGranted: () {
+      wifiVM.scan();
+    }, onDenied: () {
+      alertMessage(context, message: "Location permission require to scan");
+    });
   }
 
   Widget wifiStateWidgets() {
@@ -114,7 +129,7 @@ class WifiPage extends BasePage {
     dynamic list = wifiVM.wifiList;
     if (list == null || list.length == 0) {
       return Container(
-        child: const Text(''),
+        child: const Text('Permission required to scan wifi'),
       );
     }
     return ListView.builder(

@@ -33,8 +33,8 @@ class MainActivity : FlutterActivity(), MyMethodChannel.Interface {
         result?.success(isWifiEnabled)
     }
 
-    override fun wifiEnable(result: Result?, isEnable: String?) {
-        wifiEnable(isEnable == "true")
+    override fun wifiEnable(result: Result?, isEnable: Boolean) {
+        wifiEnable(isEnable)
     }
 
     override fun wifiList(result: Result?) {

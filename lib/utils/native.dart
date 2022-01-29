@@ -1,4 +1,7 @@
+import 'dart:developer' as dev;
+
 import 'package:flutter/services.dart';
+import 'package:sample/model/wifi.dart';
 
 class Native {
   Native._internal();
@@ -12,18 +15,31 @@ class Native {
   }
 
   static Future<void> wifiEnable(bool isEnable) async {
-    await channel.invokeMethod(
-        'wifiEnable', <String, dynamic>{'isEnable': isEnable.toString()});
+    dynamic arg = <String, dynamic>{'isEnable': isEnable};
+    await channel.invokeMethod('wifiEnable', arg);
   }
 
   static Future<bool> isWifiEnabled() async {
     return await channel.invokeMethod('isWifiEnabled') ?? false;
   }
 
-  static Future<bool> wifiListen() async {
+  static Future<List<Wifi>> wifiScan() async {
     try {
-      return await channel.invokeMethod('wifiListen') ?? false;
-    } catch (e) {
+      String? result = await channel.invokeMethod('wifiScan');
+      return Wifi.parse(result!);
+    } on MissingPluginException catch (e) {
+      dev.log(e.message ?? e.toString());
+      return [];
+    }
+  }
+
+  static Future<bool> connect() async {
+    dynamic arg = <String, dynamic>{'ssid': 'Huy', 'password': '23121990huy'};
+    try {
+      bool result = await channel.invokeMethod('wifiConnect', arg);
+      return result;
+    } on MissingPluginException catch (e) {
+      dev.log(e.message ?? e.toString());
       return false;
     }
   }
