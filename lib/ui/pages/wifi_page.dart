@@ -1,50 +1,76 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sample/model/wifi.dart';
 import 'package:sample/ui/res/color.dart';
 import 'package:sample/ui/res/dimen.dart';
 import 'package:sample/ui/vm/wifi_vm.dart';
 import 'package:sample/ui/widgets/layout.dart';
 import 'package:sample/ui/widgets/text.dart';
 
+import '../../utils/permission.dart';
 import 'base_page.dart';
 
 final wifiProvider = ChangeNotifierProvider<WifiVM>(
-  (ref) => WifiVM(),
+  (ref) {
+    var vm = WifiVM();
+    vm.init();
+    return vm;
+  },
 );
 
-/// https://stackoverflow.com/questions/36303123/how-to-programmatically-connect-to-a-wifi-network-given-the-ssid-and-password
-/// https://www.youtube.com/watch?v=ssAKYGlmR4s
-//ignore: must_be_immutable
-class WifiPage extends BasePage {
-  WifiPage({Key? key}) : super(key: key);
+class WifiPage extends BaseStatefulWidget {
+  const WifiPage({Key? key}) : super(key: key);
 
+  @override
+  _WifiPageState createState() => _WifiPageState();
+}
+
+class _WifiPageState extends BaseState<WifiPage> {
   late WifiVM wifiVM;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     wifiVM = ref.watch(wifiProvider);
-    wifiVM.init();
-
     return defaultScaffold(
       child: Column(
         children: [
-          wifiStateWidgets(),
-          connectionWidget(),
-          buttonPrimary(
-              text: 'Scan',
-              onPressed: () {
-                requestWifiPermission(context);
-              }),
-          buttonPrimary(
+          wifiStateWidgets(ref),
+          Consumer(builder: (context, ref, _) {
+            return connectionWidget(wifiVM.currentWifi);
+          }),
+          wifiButtons(context),
+          Consumer(builder: (context, ref, _) {
+            return wifiListWidget(wifiVM.wifiList);
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget wifiButtons(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        buttonPrimary(
+            text: 'Scan',
+            onPressed: () {
+              requestWifiPermission(context);
+            }),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: buttonPrimary(
               text: 'Connect',
               onPressed: () {
                 wifiVM.connect();
               }),
-          wifiListWidget()
-        ],
-      ),
+        ),
+        buttonPrimary(
+            text: 'Hotspot',
+            onPressed: () {
+              wifiVM.startWifiAP();
+            }),
+      ],
     );
   }
 
@@ -56,7 +82,7 @@ class WifiPage extends BasePage {
     });
   }
 
-  Widget wifiStateWidgets() {
+  Widget wifiStateWidgets(WidgetRef ref) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -74,7 +100,9 @@ class WifiPage extends BasePage {
                 )),
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: wifiStateImage(),
+              child: Consumer(builder: (context, ref, _) {
+                return wifiStateImage(wifiVM.wifiState);
+              }),
             ),
           ),
           onTap: () {
@@ -85,69 +113,66 @@ class WifiPage extends BasePage {
     );
   }
 
-  Widget wifiStateImage() {
-    if (wifiVM.isProcessing) {
-      return Image.asset(
-        'assets/images/wifi_anim.gif',
-        fit: BoxFit.contain,
-      );
-    }
-    if (wifiVM.isEnable) {
-      return LayoutBuilder(builder: (context, constraint) {
-        return Icon(
-          Icons.wifi,
-          color: ColorRes.primary,
-          size: constraint.biggest.height,
+  Widget wifiStateImage(WIFI_STATE wifiState) {
+    switch (wifiState) {
+      case WIFI_STATE.disabled:
+        return LayoutBuilder(builder: (context, constraint) {
+          return Icon(
+            Icons.wifi,
+            color: ColorRes.disable,
+            size: constraint.biggest.height,
+          );
+        });
+      case WIFI_STATE.enabled:
+        return LayoutBuilder(builder: (context, constraint) {
+          return Icon(
+            Icons.wifi,
+            color: ColorRes.primary,
+            size: constraint.biggest.height,
+          );
+        });
+      default:
+        return Image.asset(
+          'assets/images/wifi_anim.gif',
+          fit: BoxFit.contain,
         );
-      });
     }
-    return LayoutBuilder(builder: (context, constraint) {
-      return Icon(
-        Icons.wifi,
-        color: ColorRes.disable,
-        size: constraint.biggest.height,
-      );
-    });
   }
 
-  Widget connectionWidget() {
+  Widget connectionWidget(Wifi? wifi) {
     String infoText;
-    if (wifiVM.connected) {
-      infoText = 'SSID: ${wifiVM.ssid}\n'
-          'BSSID: ${wifiVM.bssid}\n'
-          'IP: ${wifiVM.ip}\n';
+    if (wifi != null) {
+      infoText = 'SSID: ${wifi.ssid}\n'
+          'BSSID: ${wifi.bssid}';
     } else {
       infoText = 'No connection information';
     }
-    return Padding(
-      padding: const EdgeInsets.only(top: Dimen.padding8),
-      child: Text(infoText),
-    );
+    return Text(infoText);
   }
 
-  Widget wifiListWidget() {
-    dynamic list = wifiVM.wifiList;
-    if (list == null || list.length == 0) {
-      return Container(
-        child: const Text('Permission required to scan wifi'),
-      );
-    }
-    return ListView.builder(
-        itemCount: list.length,
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
-              height: 50,
-              color: Colors.blue[(index + 1) * 100],
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(list[index].ssid ?? 'unknown ssid'),
+  Widget wifiListWidget(List<Wifi> list) {
+    return Expanded(
+      child: ListView.builder(
+          itemCount: list.length,
+          itemBuilder: (BuildContext context, int index) {
+            var item = list[index];
+            var itemText = item.ssid ?? 'unknown ssid';
+            if (item.isConnected) {
+              itemText += '\nconnected';
+            }
+            return GestureDetector(
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                    vertical: Dimen.padding8, horizontal: Dimen.padding8),
+                height: 50,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(itemText),
+                ),
               ),
-            ),
-            onTap: () {},
-          );
-        });
+              onTap: () {},
+            );
+          }),
+    );
   }
 }

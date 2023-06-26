@@ -9,27 +9,21 @@ class Wifi {
   int? level;
   int? timestamp;
   String? password;
+  bool isConnected = false;
+
+  Wifi();
 
   Wifi.fromJson(Map<String, dynamic> json)
-      : ssid = json['SSID'],
-        bssid = json['BSSID'],
-        capabilities = json['capabilities'],
-        frequency = json['frequency'],
-        level = json['level'],
-        timestamp = json['timestamp'];
+      : ssid = json['ssid'],
+        bssid = json['bssid'];
 
   Map<String, dynamic> toJson() => {
-    'SSID': ssid,
-    'BSSID': bssid,
-    'capabilities': capabilities,
-    'frequency': frequency,
-    'level': level,
-    'timestamp': timestamp,
+    'ssid': ssid,
+    'bssid': bssid,
   };
 
-  static List<Wifi> parse(String psString) {
+  static List<Wifi> parseList(String psString) {
     final List<Wifi> htList = <Wifi>[];
-
     try {
       final List<dynamic> htMapNetworks = json.decode(psString);
       for (var htMapNetwork in htMapNetworks) {
@@ -40,4 +34,23 @@ class Wifi {
     }
     return htList;
   }
+
+  static Wifi? parse(String psString) {
+    try {
+      final dynamic htMapNetworks = json.decode(psString);
+      return Wifi.fromJson(htMapNetworks);
+    } catch (e) {
+      dev.log(e.toString());
+    }
+    return null;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return (other is Wifi) && other.ssid == ssid && other.bssid == bssid;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
+
 }

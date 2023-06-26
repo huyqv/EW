@@ -12,7 +12,8 @@ class ApiClient {
 
   final Client _client = Client();
 
-  static String service = 'http://weezi.biz:8085/';
+  static Uri url = Uri.parse('https://eurowindow.wee.vn/api/');
 
   static Client client = _instance._client;
+
 }

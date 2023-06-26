@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
+
+    <base-config cleartextTrafficPermitted="false" />
+
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">weezi.biz</domain>
-        <domain includeSubdomains="true">www.wee.vn</domain>
+        <domain includeSubdomains="true">eurowindow.wee.vn</domain>
     </domain-config>
+
 </network-security-config>

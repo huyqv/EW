@@ -1,52 +1,93 @@
-import 'dart:developer' as dev;
+import 'dart:io' show Platform;
 
 import 'package:flutter/cupertino.dart';
+import 'package:sample/data/native.dart';
 import 'package:sample/model/wifi.dart';
-import 'package:sample/utils/native.dart';
+
+enum WIFI_STATE { processing, disabled, enabled }
 
 class WifiVM with ChangeNotifier {
-  bool connected = false;
-  bool isEnable = false;
-  bool isProcessing = false;
-  String ssid = '...';
-  String bssid = '...';
-  String ip = '...';
-  List<Wifi>? wifiList;
+  WIFI_STATE wifiState = WIFI_STATE.processing;
+  Wifi? currentWifi;
+  Wifi? currentWifiSelected;
+  List<Wifi> wifiList = [];
 
-  init() async {}
+  init() async {
+    // var isEnable = await Native.isWifiEnabled();
+    // wifiState = isEnable ? WIFI_STATE.enabled : WIFI_STATE.disabled;
+    // await onWifiConnectionChanged();
+    // notifyListeners();
+    if(Platform.isIOS) {
+      return;
+    }
+    await listenWifiStateChange();
+  }
+
+  listenWifiStateChange() async {
+    bool isEnabled = wifiState == WIFI_STATE.enabled;
+    bool result = await Native.wifiListen(isEnabled);
+    wifiState = result ? WIFI_STATE.enabled : WIFI_STATE.disabled;
+    onWifiConnectionChanged();
+    notifyListeners();
+    listenWifiStateChange();
+  }
 
   switchEnable() async {
-    if (isProcessing) {
+    if (wifiState == WIFI_STATE.processing) {
       return;
     }
-    isProcessing = true;
+    wifiState = WIFI_STATE.processing;
     notifyListeners();
-    await Native.wifiEnable(!isEnable);
-    isEnable = await Native.isWifiEnabled();
-    await Future.delayed(const Duration(milliseconds: 1000));
-    isProcessing = false;
-    notifyListeners();
+    var isEnabled = await Native.isWifiEnabled();
+    await Native.wifiEnable(!isEnabled);
   }
 
-  onConnectivityChanged() async {
-    if (connected) {}
+  onWifiConnectionChanged() async {
+    var isWifiEnabled = await Native.isWifiEnabled();
+    currentWifi = isWifiEnabled ? await Native.currentWifi() : null;
+    if (currentWifi != null) {
+      currentWifi!.isConnected = true;
+    }
   }
+
+  var isScanning = false;
 
   scan() async {
-    if (!isEnable) {
+    if (Platform.isIOS) {
       return;
     }
-    try {
-      wifiList = await Native.wifiScan();
-      wifiList?.forEach((element) {});
-      return;
-    } catch (e) {
-      dev.log(e.toString());
+    wifiList = [];
+    isScanning = true;
+    if (wifiState == WIFI_STATE.enabled) {
+      var newResults = await Native.wifiScan();
+      // var results = newResults.where((e) => e.bssid != currentWifi?.bssid);
+      wifiList.addAll(newResults);
+    }
+    notifyListeners();
+
+    if (isScanning) {
+      await Future.delayed(const Duration(milliseconds: 3000), () {
+        if (isScanning) {
+          scan();
+        }
+      });
     }
   }
 
-  connect() {
-    Native.connect();
+  stopScan() async {
+    isScanning = false;
   }
 
+  Future<bool> connect() async {
+    return await Native.connect(ssid: '', password: 'sycomore22');
+  }
+
+  startWifiAP() {
+    Native.startWifiAP();
+  }
+
+  void onWifiChange(Wifi? wifi) {
+    currentWifiSelected = wifi;
+    notifyListeners();
+  }
 }
